@@ -20,16 +20,16 @@ Write-Host "$testDir"
 
 # Restore and build projects
 & dotnet restore $solution
-& dotnet build $webSite --configuration $BuildConfiguration
-& dotnet build $test --configuration $BuildConfiguration
+& dotnet build $webSite --configuration $BuildConfiguration --verbosity d
+& dotnet build $test --configuration $BuildConfiguration --verbosity d
 
 # Run tests
-& dotnet test $test --logger "trx;LogFileName=testresults.xml" --configuration $BuildConfiguration --no-build
+& dotnet test $test --configuration $BuildConfiguration --logger "trx;LogFileName=testresults.xml" --no-build
 
 # Publish
 $publishDirectory = Join-Path $BuildStagingDirectory "Publish"
 $outputDirectory = Join-Path $publishDirectory "PartsUnlimited"
-& dotnet publish $webSite --framework netcoreapp1.1 --output $outputDirectory --configuration $BuildConfiguration
+& dotnet publish $webSite --framework netcoreapp2.2 --output $outputDirectory --configuration $BuildConfiguration
 
 # Package to MSDeploy format
 $manifestFile = Join-Path $publishDirectory "manifest.xml"
